@@ -2,7 +2,6 @@ import json
 import logging
 
 # Example data
-
 data = {
     "items": [
         {"id": 1, "name": "Banana", "price": 50, "Size": "Dozen"},
@@ -15,13 +14,9 @@ data = {
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
 def lambda_handler(event, context):
-    # Your Lambda function logic here
-
     # Log the event
     logger.info("Event: %s", json.dumps(event))
-
 
     # Determine the HTTP method of the request
     http_method = event["httpMethod"]
@@ -30,11 +25,12 @@ def lambda_handler(event, context):
         # Return the data in the response
         response = {
             "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
             "body": json.dumps(data)
         }
-        return response
-        
-    # Handle POST request
     elif http_method == "POST":
         # Retrieve the request's body and parse it as JSON
         body = json.loads(event["body"])
@@ -43,11 +39,12 @@ def lambda_handler(event, context):
         # Return the updated data in the response
         response = {
             "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
             "body": json.dumps(data)
         }
-        return response  
-    
-    # Handle PUT request
     elif http_method == "PUT":
         # Retrieve the request's body and parse it as JSON
         body = json.loads(event["body"])
@@ -59,16 +56,39 @@ def lambda_handler(event, context):
         # Return the updated data in the response
         response = {
             "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
             "body": json.dumps(data)
         }
-        return response
-
+    elif http_method == "DELETE":
+        # Retrieve the request's body and parse it as JSON
+        body = json.loads(event["body"])
+        # Find the item with the specified id in the example data
+        for i, item in enumerate(data["items"]):
+            if item["id"] == body["id"]:
+                # Remove the item from the example data
+                del data["items"][i]
+                break
+        # Return the updated data in the response
+        response = {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            "body": json.dumps(data)
+        }
     else:
         # Return an error message for unsupported methods
         response = {
             "statusCode": 405,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
             "body": json.dumps({"error": "Method not allowed"})
         }
-        return response
 
-
+    return response

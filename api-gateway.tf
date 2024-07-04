@@ -31,6 +31,11 @@ resource "aws_api_gateway_resource" "update" {
   path_part = "Update"
 }
 
+resource "aws_api_gateway_resource" "delete" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
+  path_part = "delete"
+}
 
 
 resource "aws_api_gateway_deployment" "deployment" {
@@ -45,7 +50,9 @@ resource "aws_api_gateway_deployment" "deployment" {
       aws_api_gateway_integration.lambda_integration2.resource_id,
       aws_api_gateway_integration.lambda_integration2.integration_http_method,
       aws_api_gateway_integration.lambda_integration3.id,
-      aws_api_gateway_integration.lambda_integration3.resource_id
+      aws_api_gateway_integration.lambda_integration3.resource_id,
+      aws_api_gateway_integration.lambda_integration4.id,
+      aws_api_gateway_integration.lambda_integration4.resource_id
       ]))
   }
 
