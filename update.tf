@@ -12,7 +12,7 @@ resource "aws_api_gateway_integration" "lambda_integration3" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.update.id
   http_method = aws_api_gateway_method.update.http_method
-  integration_http_method = "PUT"
+  integration_http_method = "POST"
   type = "AWS_PROXY"
   uri = aws_lambda_function.html_lambda.invoke_arn
 }
